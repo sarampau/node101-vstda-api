@@ -35,6 +35,27 @@ app.get('/api/TodoItems', (req, res) => {
     res.send(mockData);
 });
 
+app.get('/api/TodoItems/complete', (req, res) => {
+    let complete = [];
+    for (let i = 0; i < mockData.length; i++) {
+        if (mockData[i].completed == true) {
+            complete.push(mockData[i]);
+        }
+    }
+    res.send(complete);
+});
+
+app.get('/api/TodoItems/incomplete', (req, res) => {
+    let incomplete = [];
+    for (let i = 0; i < mockData.length; i++) {
+        if (mockData[i].completed == false) {
+            incomplete.push(mockData[i]);
+            continue;
+        }
+        res.send(incomplete);
+    }
+})
+
 app.get('/api/TodoItems/:id', (req, res) => {
     let id = req.params.id;
     for (let i = 0; i < mockData.length; i++) {
@@ -46,15 +67,17 @@ app.get('/api/TodoItems/:id', (req, res) => {
 
 app.post('/api/TodoItems', (req, res) => {
     let newTodo = req.body;
+    mockData.push(req.body);
+    res.status(201).json(req.body);
+});
+
+app.put('/api/TodoItems', (req, res) => {
+    let newTodo = req.body;
     for (let i = 0; i < mockData.length; i++) {
         if (newTodo.todoItemId == mockData[i].todoItemId) {
-            mockData.splice(i, 1, newTodo);
-            break;
-        } else {
-            mockData.push(req.body);
+            res.json(mockData.splice(i, 1, newTodo));
         }
-    } 
-    res.status(201).json(req.body);
+    }
 });
 
 app.delete('/api/TodoItems/:id', (req, res) => {
