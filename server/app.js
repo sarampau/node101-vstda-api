@@ -67,8 +67,8 @@ app.get('/api/TodoItems/:id', (req, res) => {
 
 app.post('/api/TodoItems', (req, res) => {
     let newTodo = req.body;
-    mockData.push(req.body);
-    res.status(201).json(req.body);
+    mockData.push(newTodo);
+    res.status(201).json(newTodo);
 });
 
 app.put('/api/TodoItems', (req, res) => {
@@ -79,6 +79,20 @@ app.put('/api/TodoItems', (req, res) => {
         }
     }
 });
+
+app.patch('/api/TodoItems/:id', (req, res) => {
+    let id = req.params.id;
+    for (let i = 0; i < mockData.length; i++) {
+        if (mockData[i].todoItemId == id) {
+            if (mockData[i].completed == true) {
+                mockData[i].completed = false;
+            } else {
+                mockData[i].completed = true;
+            }
+        }
+        res.send(mockData[i]);
+    }
+})
 
 app.delete('/api/TodoItems/:id', (req, res) => {
     let id = req.params.id;
